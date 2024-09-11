@@ -1,10 +1,12 @@
 using Dima.API.Data;
+using Dima.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var cnnStr = builder.Configuration.GetConnectionString("DafaultConnection");
+builder.Services.AddTransient<Handler>();
 
+var cnnStr = builder.Configuration.GetConnectionString("DafaultConnection");
 builder.Services.AddDbContext<AppDbContext>(x =>
 {
     x.UseSqlServer(cnnStr);
@@ -26,27 +28,48 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+app.MapPost(
+    "/v1/categories",
+    (Request request, Handler handler) 
+    => handler.Handle(request))
+    .WithName("Categories: Create")
+    .WithSummary("Cria uma nova categoria")
+    .Produces<Response>();
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+// Request
+public class Request
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public string Title { get; set; } = string.Empty;
+    public string? Description { get; set; }
+}
+
+// Response
+public class Response
+{
+    public long Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+}
+
+// Handler
+public class Handler(AppDbContext context)
+{
+    public Response Handle(Request request)
+    {
+        var category = new Category()
+        {
+            Title = request.Title.Trim(),
+            Description = request.Description?.Trim()
+        };
+
+        context.Categories.Add(category);
+        context.SaveChanges();
+
+        return new Response()
+        {
+            Id = category.Id,
+            Title = request.Title
+        };
+    }
 }
