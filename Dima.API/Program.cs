@@ -1,10 +1,13 @@
 using Dima.API.Data;
-using Dima.Core.Models;
+using Dima.API.Handlers;
+using Dima.Core.Handlers;
+using Dima.Core.Requests.Categories;
+using Dima.Core.Responses.Category;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddTransient<Handler>();
+builder.Services.AddScoped<ICategoryHandler, CategoryHandler>();
 
 var cnnStr = builder.Configuration.GetConnectionString("DafaultConnection");
 builder.Services.AddDbContext<AppDbContext>(x =>
@@ -30,46 +33,42 @@ app.UseHttpsRedirection();
 
 app.MapPost(
     "/v1/categories",
-    (Request request, Handler handler) 
-    => handler.Handle(request))
+    async (CreateCategoryRequest request, ICategoryHandler handler)
+    => await handler.CreateAsync(request))
     .WithName("Categories: Create")
     .WithSummary("Cria uma nova categoria")
-    .Produces<Response>();
+    .Produces<CreateCategoryResponse>();
+
+app.MapPut(
+    "/v1/categories/{id}",
+    async ([AsParameters] UpdateCategoryRequest request, ICategoryHandler handler)
+    => await handler.UpdateAsync(request))
+    .WithName("Categories: Update")
+    .WithSummary("Atualiza uma categoria")
+    .Produces<UpdateCategoryResponse>();
+
+app.MapDelete(
+    "/v1/categories/{id}",
+    async ([AsParameters] DeleteCategoryRequest request, ICategoryHandler handler)
+    => await handler.DeleteAsync(request))
+    .WithName("Categories: Delete")
+    .WithSummary("Excluí uma categoria")
+    .Produces<DeleteCategoryResponse>();
+
+app.MapGet(
+    "/v1/categories/{id}",
+    async ([AsParameters] GetCategoryByIdRequest request, ICategoryHandler handler)
+    => await handler.GetByIdAsync(request))
+    .WithName("Categories: Get By Id")
+    .WithSummary("Retorna uma categoria pelo Id")
+    .Produces<GetCategoryByIdResponse>();
+
+app.MapGet(
+    "/v1/categories",
+    async ([AsParameters] GetAllCategoriesRequest request, ICategoryHandler handler)
+    => await handler.GetAllAsync(request))
+    .WithName("Categories: Get All")
+    .WithSummary("Retorna todas as categorias")
+    .Produces<GetAllCategoriesResponse>();
 
 app.Run();
-
-// Request
-public class Request
-{
-    public string Title { get; set; } = string.Empty;
-    public string? Description { get; set; }
-}
-
-// Response
-public class Response
-{
-    public long Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-}
-
-// Handler
-public class Handler(AppDbContext context)
-{
-    public Response Handle(Request request)
-    {
-        var category = new Category()
-        {
-            Title = request.Title.Trim(),
-            Description = request.Description?.Trim()
-        };
-
-        context.Categories.Add(category);
-        context.SaveChanges();
-
-        return new Response()
-        {
-            Id = category.Id,
-            Title = request.Title
-        };
-    }
-}
