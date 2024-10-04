@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Dima.Core\Dima.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Filters\" />
+  </ItemGroup>
+
 </Project>

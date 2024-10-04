@@ -9,7 +9,7 @@ namespace Dima.API.Handlers;
 
 public class CategoryHandler(AppDbContext _context) : ICategoryHandler
 {
-    public async Task<CreateCategoryResponse?> CreateAsync(CreateCategoryRequest request)
+    public async Task<CreateCategoryResponse> CreateAsync(CreateCategoryRequest request)
     {
         try
         {
@@ -31,7 +31,7 @@ public class CategoryHandler(AppDbContext _context) : ICategoryHandler
         }
     }
 
-    public async Task<UpdateCategoryResponse?> UpdateAsync(UpdateCategoryRequest request)
+    public async Task<UpdateCategoryResponse> UpdateAsync(UpdateCategoryRequest request)
     {
         try
         {
@@ -57,7 +57,7 @@ public class CategoryHandler(AppDbContext _context) : ICategoryHandler
         }
     }
 
-    public async Task<DeleteCategoryResponse?> DeleteAsync(DeleteCategoryRequest request)
+    public async Task<DeleteCategoryResponse> DeleteAsync(DeleteCategoryRequest request)
     {
         try
         {
@@ -80,7 +80,7 @@ public class CategoryHandler(AppDbContext _context) : ICategoryHandler
         }
     }
 
-    public async Task<GetCategoryByIdResponse?> GetByIdAsync(GetCategoryByIdRequest request)
+    public async Task<GetCategoryByIdResponse> GetByIdAsync(GetCategoryByIdRequest request)
     {
         try
         {
@@ -103,10 +103,10 @@ public class CategoryHandler(AppDbContext _context) : ICategoryHandler
         try
         {
             var query = _context.Categories
-            .AsNoTracking()
-            .Where(x => x.UserId == request.UserId)
-            .OrderBy(x => x.Title)
-            .AsQueryable();
+                .AsNoTracking()
+                .Where(x => x.UserId == request.UserId)
+                .OrderBy(x => x.Title)
+                .AsQueryable();
 
             var count = await query.CountAsync();
 
@@ -119,7 +119,7 @@ public class CategoryHandler(AppDbContext _context) : ICategoryHandler
         }
         catch
         {
-            return new GetAllCategoriesResponse(null, 500, "Não foi possível consultar as categorias");
+            return new GetAllCategoriesResponse(null, 500, "[FP008] Não foi possível consultar as categorias");
         }
     }
 }

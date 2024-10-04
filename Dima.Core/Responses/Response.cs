@@ -18,10 +18,8 @@ public class Response<T>
         Data = data;
         Message = message;
     }
-
-    public T? Data { get; set; }
-    public string? Message { get; set; }
-
-    [JsonIgnore]
+    
     public bool IsSuccess => _code is >= 200 and <= 299;
+    public string? Message { get; set; }
+    public T? Data { get; set; }
 }

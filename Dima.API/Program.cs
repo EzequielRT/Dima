@@ -1,8 +1,7 @@
 using Dima.API.Data;
+using Dima.API.Endpoints;
 using Dima.API.Handlers;
 using Dima.Core.Handlers;
-using Dima.Core.Requests.Categories;
-using Dima.Core.Responses.Category;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,44 +30,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost(
-    "/v1/categories",
-    async (CreateCategoryRequest request, ICategoryHandler handler)
-    => await handler.CreateAsync(request))
-    .WithName("Categories: Create")
-    .WithSummary("Cria uma nova categoria")
-    .Produces<CreateCategoryResponse>();
+app.MapGet("/", () => new { message = "OK"});
 
-app.MapPut(
-    "/v1/categories/{id}",
-    async ([AsParameters] UpdateCategoryRequest request, ICategoryHandler handler)
-    => await handler.UpdateAsync(request))
-    .WithName("Categories: Update")
-    .WithSummary("Atualiza uma categoria")
-    .Produces<UpdateCategoryResponse>();
-
-app.MapDelete(
-    "/v1/categories/{id}",
-    async ([AsParameters] DeleteCategoryRequest request, ICategoryHandler handler)
-    => await handler.DeleteAsync(request))
-    .WithName("Categories: Delete")
-    .WithSummary("Excluí uma categoria")
-    .Produces<DeleteCategoryResponse>();
-
-app.MapGet(
-    "/v1/categories/{id}",
-    async ([AsParameters] GetCategoryByIdRequest request, ICategoryHandler handler)
-    => await handler.GetByIdAsync(request))
-    .WithName("Categories: Get By Id")
-    .WithSummary("Retorna uma categoria pelo Id")
-    .Produces<GetCategoryByIdResponse>();
-
-app.MapGet(
-    "/v1/categories",
-    async ([AsParameters] GetAllCategoriesRequest request, ICategoryHandler handler)
-    => await handler.GetAllAsync(request))
-    .WithName("Categories: Get All")
-    .WithSummary("Retorna todas as categorias")
-    .Produces<GetAllCategoriesResponse>();
+app.MapEndpoints();
 
 app.Run();
