@@ -1,4 +1,5 @@
 ﻿using Dima.Core.Enums;
+using System.Text.Json.Serialization;
 
 namespace Dima.Core.Models;
 
@@ -7,7 +8,7 @@ public class Transaction
     public long Id { get; set; }
     public string Title { get; set; } = string.Empty;
 
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? PaidOrReceveidAt { get; set; }
 
     public ETransactionType Type { get; set; } = ETransactionType.Withdraw;
@@ -16,5 +17,6 @@ public class Transaction
     public long CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 
+    [JsonIgnore]
     public string UserId { get; set; } = string.Empty;
 }

@@ -28,7 +28,7 @@ namespace Dima.API.Data.Mappings
                 .IsRequired(true)
                 .HasColumnType("MONEY");
 
-            builder.Property(x => x.CreatedDate)
+            builder.Property(x => x.CreatedAt)
                 .IsRequired(true);
 
             builder.Property(x => x.PaidOrReceveidAt)

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICategoryHandler, CategoryHandler>();
+builder.Services.AddScoped<ITransactionHandler, TransactionHandler>();
 
 var cnnStr = builder.Configuration.GetConnectionString("DafaultConnection");
 builder.Services.AddDbContext<AppDbContext>(x =>

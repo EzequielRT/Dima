@@ -1,15 +1,15 @@
-﻿namespace Dima.Core.Responses.Category;
+﻿namespace Dima.Core.Responses.Transactions;
 
-public class GetAllCategoriesResponse : PagedResponse<List<Models.Category>>
+public class GetTransactionsByPeriodResponse : PagedResponse<List<Models.Transaction>>
 {
-    public GetAllCategoriesResponse(
-        List<Models.Category>? models,
+    public GetTransactionsByPeriodResponse(
+        List<Models.Transaction>? models,
         int totalCount,
         int currentPage = Configuration.DEFAULT_PAGE_NUMBER,
         int pageSize = Configuration.DEFAULT_PAGE_SIZE) : base(models, totalCount, currentPage, pageSize) { }
 
-    public GetAllCategoriesResponse(
-        List<Models.Category>? models,
+    public GetTransactionsByPeriodResponse(
+        List<Models.Transaction>? models,
         int code = Configuration.DEFAULT_STATUS_CODE,
         string? message = null) : base(models, code, message) { }
 }
