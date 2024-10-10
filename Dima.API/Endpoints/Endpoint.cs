@@ -13,11 +13,11 @@ public static class Endpoint
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
             //.RequireAuthorization()
-            .MapEndpoint<CreateCategoryEndpoint>()
-            .MapEndpoint<UpdateCategoryEndpoint>()
-            .MapEndpoint<DeleteCategoryEndpoint>()
-            .MapEndpoint<GetCategoryByIdEndpoint>()
-            .MapEndpoint<GetAllCategoriesEndpoint>();
+            .MapEndpoint<CategoriesEndpointsV1.CreateCategoryEndpoint>()
+            .MapEndpoint<CategoriesEndpointsV1.UpdateCategoryEndpoint>()
+            .MapEndpoint<CategoriesEndpointsV1.DeleteCategoryEndpoint>()
+            .MapEndpoint<CategoriesEndpointsV1.GetCategoryByIdEndpoint>()
+            .MapEndpoint<CategoriesEndpointsV1.GetAllCategoriesEndpoint>();
 
         endpoints.MapGroup("v1/transactions")
             .WithTags("Transactions")
