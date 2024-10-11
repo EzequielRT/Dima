@@ -2,6 +2,7 @@
 using Dima.Core.Handlers;
 using Dima.Core.Requests.Categories;
 using Dima.Core.Responses.Category;
+using System.Security.Claims;
 
 namespace Dima.API.Endpoints.Categories;
 
@@ -16,8 +17,9 @@ public class CategoriesEndpointsV1
             .Produces<CreateCategoryResponse>()        
             .WithOrder(1);
 
-        private static async Task<IResult> HandleAsync(ICategoryHandler handler, CreateCategoryRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ICategoryHandler handler, CreateCategoryRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.CreateAsync(request);
 
             return result.IsSuccess
@@ -35,8 +37,9 @@ public class CategoriesEndpointsV1
             .Produces<UpdateCategoryResponse>()     
             .WithOrder(2);
 
-        private static async Task<IResult> HandleAsync(ICategoryHandler handler, [AsParameters] UpdateCategoryRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ICategoryHandler handler, [AsParameters] UpdateCategoryRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.UpdateAsync(request);
 
             return result.IsSuccess
@@ -54,8 +57,9 @@ public class CategoriesEndpointsV1
             .Produces<DeleteCategoryResponse>()     
             .WithOrder(3);
 
-        private static async Task<IResult> HandleAsync(ICategoryHandler handler, [AsParameters] DeleteCategoryRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ICategoryHandler handler, [AsParameters] DeleteCategoryRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.DeleteAsync(request);
 
             return result.IsSuccess
@@ -73,8 +77,9 @@ public class CategoriesEndpointsV1
             .Produces<GetCategoryByIdResponse>()     
             .WithOrder(4);
 
-        private static async Task<IResult> HandleAsync(ICategoryHandler handler, [AsParameters] GetCategoryByIdRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ICategoryHandler handler, [AsParameters] GetCategoryByIdRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.GetByIdAsync(request);
 
             return result.IsSuccess
@@ -92,8 +97,9 @@ public class CategoriesEndpointsV1
             .Produces<GetAllCategoriesResponse>()  
             .WithOrder(5);
 
-        private static async Task<IResult> HandleAsync(ICategoryHandler handler, [AsParameters] GetAllCategoriesRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ICategoryHandler handler, [AsParameters] GetAllCategoriesRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.GetAllAsync(request);
 
             return result.IsSuccess

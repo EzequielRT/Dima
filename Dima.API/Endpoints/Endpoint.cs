@@ -12,7 +12,7 @@ public static class Endpoint
 
         endpoints.MapGroup("v1/categories")
             .WithTags("Categories")
-            //.RequireAuthorization()
+            .RequireAuthorization()
             .MapEndpoint<CategoriesEndpointsV1.CreateCategoryEndpoint>()
             .MapEndpoint<CategoriesEndpointsV1.UpdateCategoryEndpoint>()
             .MapEndpoint<CategoriesEndpointsV1.DeleteCategoryEndpoint>()
@@ -21,7 +21,7 @@ public static class Endpoint
 
         endpoints.MapGroup("v1/transactions")
             .WithTags("Transactions")
-            //.RequireAuthorization()
+            .RequireAuthorization()
             .MapEndpoint<TransactionsEndpointsV1.CreateTransactionEndpoint>()
             .MapEndpoint<TransactionsEndpointsV1.UpdateTransactionEndpoint>()
             .MapEndpoint<TransactionsEndpointsV1.DeleteTransactionEndpoint>()

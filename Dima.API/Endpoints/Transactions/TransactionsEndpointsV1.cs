@@ -2,6 +2,7 @@
 using Dima.Core.Handlers;
 using Dima.Core.Requests.Transactions;
 using Dima.Core.Responses.Transactions;
+using System.Security.Claims;
 
 namespace Dima.API.Endpoints.Transactions;
 
@@ -16,8 +17,9 @@ public class TransactionsEndpointsV1
             .Produces<CreateTransactionResponse>()
             .WithOrder(1);
 
-        private static async Task<IResult> HandleAsync(ITransactionHandler handler, CreateTransactionRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ITransactionHandler handler, CreateTransactionRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.CreateAsync(request);
 
             return result.IsSuccess
@@ -35,8 +37,9 @@ public class TransactionsEndpointsV1
             .Produces<UpdateTransactionResponse>()     
             .WithOrder(2);
 
-        private static async Task<IResult> HandleAsync(ITransactionHandler handler, [AsParameters] UpdateTransactionRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ITransactionHandler handler, [AsParameters] UpdateTransactionRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.UpdateAsync(request);
 
             return result.IsSuccess
@@ -54,8 +57,9 @@ public class TransactionsEndpointsV1
             .Produces<DeleteTransactionResponse>()     
             .WithOrder(3);
 
-        private static async Task<IResult> HandleAsync(ITransactionHandler handler, [AsParameters] DeleteTransactionRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ITransactionHandler handler, [AsParameters] DeleteTransactionRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.DeleteAsync(request);
 
             return result.IsSuccess
@@ -73,8 +77,9 @@ public class TransactionsEndpointsV1
             .Produces<GetTransactionByIdResponse>()     
             .WithOrder(4);
 
-        private static async Task<IResult> HandleAsync(ITransactionHandler handler, [AsParameters] GetTransactionByIdRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ITransactionHandler handler, [AsParameters] GetTransactionByIdRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.GetByIdAsync(request);
 
             return result.IsSuccess
@@ -92,8 +97,9 @@ public class TransactionsEndpointsV1
             .Produces<GetTransactionsByPeriodResponse>()  
             .WithOrder(5);
 
-        private static async Task<IResult> HandleAsync(ITransactionHandler handler, [AsParameters] GetTransactionsByPeriodRequest request)
+        private static async Task<IResult> HandleAsync(ClaimsPrincipal user, ITransactionHandler handler, [AsParameters] GetTransactionsByPeriodRequest request)
         {
+            request.SetUserId(user);
             var result = await handler.GetByPeriodAsync(request);
 
             return result.IsSuccess
