@@ -1,5 +1,5 @@
 ﻿using Dima.API.Common.Api;
-using Dima.API.Models;
+using Dima.Core.Models.Account;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
@@ -12,7 +12,7 @@ public class IdentityEndpointsV1
         public static void Map(IEndpointRouteBuilder app)
             => app.MapPost("/logout", HandleAsync);
 
-        private static async Task<IResult> HandleAsync(SignInManager<User> signInManager)
+        private static async Task<IResult> HandleAsync(SignInManager<Models.User> signInManager)
         {
             await signInManager.SignOutAsync();
             return Results.Ok();
@@ -33,13 +33,13 @@ public class IdentityEndpointsV1
 
             var roles = identity
                 .FindAll(identity.RoleClaimType)
-                .Select(c => new
+                .Select(c => new RoleClaim
                 {
-                    c.Issuer,
-                    c.OriginalIssuer,
-                    c.Type,
-                    c.Value,
-                    c.ValueType
+                    Issuer = c.Issuer,
+                    OriginalIssuer = c.OriginalIssuer,
+                    Type = c.Type,
+                    Value = c.Value,
+                    ValueType = c.ValueType
                 });
 
             return Results.Ok(roles);
